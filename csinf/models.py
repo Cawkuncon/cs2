@@ -40,19 +40,3 @@ class SkinInfo(models.Model):
     def __str__(self):
         return self.name
 
-
-class Notice(models.Model):
-    username = models.ForeignKey(
-        'accounts.MyUser',
-        on_delete=models.CASCADE,
-        null=True,
-    )
-
-    def __str__(self):
-        return f'username: {self.username}.'
-
-    from_buy = models.CharField(choices=market_choice, default=market_choice[0], max_length=1)
-    sell_to = models.CharField(choices=market_choice, default=market_choice[0], max_length=1)
-    buy_price = models.FloatField(null=True)
-    sell_price = models.FloatField(null=True)
-    text = models.TextField(null=True, blank=True)

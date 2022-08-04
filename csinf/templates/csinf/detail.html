@@ -37,7 +37,6 @@
         {% else %}
             <input type="hidden" value="{{ skin_info.id }}" name="fav_delete">
             <button type="submit">Delete from favorite</button>
-            <h2><a href="{% url 'notice_detail' pk=skin_info.id %}">Notice</a></h2>
         {% endif %}
     </form>
     </div>

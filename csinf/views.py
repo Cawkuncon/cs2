@@ -9,8 +9,8 @@ from django.views.generic import ListView, FormView, DetailView, UpdateView
 from django.views.generic.edit import ModelFormMixin, CreateView
 
 from accounts.models import MyUser
-from csinf.forms import FormOrderBy, NoticeForm
-from csinf.models import SkinInfo, Notice
+from csinf.forms import FormOrderBy
+from csinf.models import SkinInfo
 
 
 # @login_required
@@ -140,28 +140,3 @@ class ProfileTableSkins(LoginRequiredMixin, ListView):
             current_user.favorite_skins.remove(*list_skin)
         return super().get(request, *args, **kwargs)
 
-
-class NoticeSkins(LoginRequiredMixin, ListView):
-    template_name = 'csinf/notice.html'
-    model = SkinInfo
-    context_object_name = 'notice_skins'
-
-    def get_queryset(self):
-        current_user = MyUser.objects.get(pk=self.request.user.id)
-        queryset = current_user.favorite_skins.all()
-        return queryset
-
-
-class NoticeSkinDetail(LoginRequiredMixin, CreateView, DetailView):
-    template_name = 'csinf/notice_detail.html'
-    model = SkinInfo
-    context_object_name = 'notice_skin'
-    form_class = NoticeForm
-
-    def get_success_url(self):
-        skin_id = self.kwargs['pk']
-        return reverse_lazy('notice_detail', kwargs={'pk': skin_id})
-
-    '''
-    Дописать!!!!!!!!!
-    '''

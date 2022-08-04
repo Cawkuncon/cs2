@@ -15,6 +15,17 @@
             <th>Steam_price</th>
             <th>Market_price</th>
             <th>Buff_price</th>
+            <th>Market_order</th>
+            <th>Buff_order</th>
+            <th>SB</th>
+            <th>SM</th>
+            <th>MB</th>
+            <th>MS</th>
+            <th>BM</th>
+            <th>BS</th>
+            <th>Market_7d</th>
+            <th>Num_sell_buff</th>
+            <th>Num_order_buff</th>
             <th>Del fav</th>
             {% for skin in fav_table_skins %}
                 <tr>
@@ -27,6 +38,17 @@
                     <td><a href="{{ skin.steam_link }}" target="_blank"><h3 align="center">{{ skin.steam_price }}</h3></a></td>
                     <td><a href="{{ skin.market_link }}" target="_blank"><h3 align="center">{{ skin.market_price }}</h3></a></td>
                     <td><a href="{{ skin.buff_link }}" target="_blank"><h3 align="center">{{ skin.buff_price }}</h3></a></td>
+                    <td><h3>{{ skin.market_order }}</h3></td>
+                    <td><h3>{{ skin.buff_order }}</h3></td>
+                    <td><h3>{{ skin.sb }}</h3></td>
+                    <td><h3>{{ skin.sm }}</h3></td>
+                    <td><h3>{{ skin.mb }}</h3></td>
+                    <td><h3>{{ skin.ms }}</h3></td>
+                    <td><h3>{{ skin.bm }}</h3></td>
+                    <td><h3>{{ skin.bs }}</h3></td>
+                    <td><h3>{{ skin.market_7d }}</h3></td>
+                    <td><h3>{{ skin.num_sell_buff }}</h3></td>
+                    <td><h3>{{ skin.num_order_buff }}</h3></td>
                     <td align="center"><input type="checkbox" value="{{ skin.id }}" name="del_from_fav"></td>
                 </tr>
             {% endfor %}

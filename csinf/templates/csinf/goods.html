@@ -41,7 +41,6 @@
                 <th>num_order_buff</th>
                 <th>favorite</th>
                 <th>del fav</th>
-                <th>notice</th>
                 {% for skin in skins %}
                     <tr>
                         <td><a href="{% url 'skin_detail' pk=skin.id %}" target="_blank">{{ skin.name }}</a></td>
@@ -63,11 +62,9 @@
                             <td><input type="checkbox" value="{{ skin.id }}" name="favorite_skinid" checked="" disabled>
                             </td>
                             <td><input type="checkbox" value="{{ skin.id }}" name="delfav_skinid"></td>
-                            <td><button onclick="location.href='{% url 'notice_detail' pk=skin.id %}'" type="button">Notice</button></td>
                         {% else %}
                             <td><input type="checkbox" value="{{ skin.id }}" name="favorite_skinid"></td>
                             <td><input type="checkbox" value="{{ skin.id }}" name="delfav_skinid" disabled></td>
-                            <td><button disabled>Notice</button></td>
                         {% endif %}
                     </tr>
                 {% endfor %}
