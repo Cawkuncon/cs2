@@ -1,0 +1,14 @@
+{% extends 'csinf/base.html' %}
+
+{% block title %}Main{% endblock %}
+{% block content %}
+    <div align="center">
+    {% if user.is_authenticated %}
+        <h1>Hello, {{ user.username }}</h1>
+        <p><a href="https://buff.163.com/">Buff</a>, <a href="https://market.csgo.com/">Market</a>, <a href="https://steamcommunity.com/market/">Steam</a> prices parser.</p>
+    {% else %}
+        <h1>Welcome</h1>
+        <p><a href="https://buff.163.com/">Buff</a>, <a href="https://market.csgo.com/">Market</a>, <a href="https://steamcommunity.com/market/">Steam</a> prices parser.</p>
+    {% endif %}
+    </div>
+{% endblock %}

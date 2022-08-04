@@ -1,0 +1,16 @@
+{% extends 'csinf/base.html' %}
+
+{% block title %}
+    {{ user.username }}'s favorite skins list
+{% endblock %}
+
+{% block content %}
+    {% for skin in fav_list_skins %}
+        <a href="{% url 'skin_detail' pk=skin.id %}"><h4 style="margin: 1px">{{ skin.name }}</h4></a>
+    {% endfor %}
+    <h3>Total favorite skins: {{ fav_list_skins.count }}</h3>
+    <form method="post">
+    {% csrf_token %}
+        <button type="submit">Delete all from favorite</button>
+    </form>
+{% endblock %}

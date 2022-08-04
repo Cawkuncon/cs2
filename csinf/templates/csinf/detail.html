@@ -1,0 +1,44 @@
+{% extends 'csinf/base.html' %}
+
+
+{% block title %}
+    {{ skin_info.name }}
+{% endblock %}
+
+{% block content %}
+    <div align="center">
+        <h1><a href="{{ skin_info.steam_link }}" target="_blank">{{ skin_info.name }} info</a></h1>
+        <a href="{{ skin_info.buff_link }}" target="_blank"><img src="{{ skin_info.get_image_url }}" alt=""></a>
+        <h2>Steam price: {{ skin_info.steam_price }} &#165;</h2>
+        <h2>Buff price: {{ skin_info.market_price }} &#165;</h2>
+        <h2>Market price: {{ skin_info.buff_price }} &#165;</h2>
+        <hr width=10% align="center">
+        <h2>Ratio with tax</h2>
+        <h3>steam/buff ratio: {{ skin_info.sb }}</h3>
+        <h3>steam/market ratio: {{ skin_info.sm }}</h3>
+        <h3>market/buff ratio: {{ skin_info.mb }}</h3>
+        <h3>market/steam ratio: {{ skin_info.ms }}</h3>
+        <h3>buff/market ratio: {{ skin_info.bm }}</h3>
+        <h3>buff/steam ratio: {{ skin_info.bs }}</h3>
+        <hr width=10% align="center">
+        <h3>buff sales: {{ skin_info.num_sell_buff }}</h3>
+        <h3>order buff: {{ skin_info.num_order_buff }}</h3>
+        <h3>market 7d sales: {{ skin_info.market_7d }}</h3>
+        <h4><a href="{{ skin_info.steam_link }}" target="_blank">Steam link</a></h4>
+        <h4><a href="{{ skin_info.buff_link }}" target="_blank">Buff link</a></h4>
+        <h4><a href="{{ skin_info.market_link }}" target="_blank">Market link</a></h4>
+    </div>
+    <div align="center">
+    <form method="POST">
+    {% csrf_token %}
+        {% if not fav_skin %}
+            <input type="hidden" value="{{ skin_info.id }}" name="fav_add">
+            <button type="submit">Add to favorite</button>
+        {% else %}
+            <input type="hidden" value="{{ skin_info.id }}" name="fav_delete">
+            <button type="submit">Delete from favorite</button>
+            <h2><a href="{% url 'notice_detail' pk=skin_info.id %}">Notice</a></h2>
+        {% endif %}
+    </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'csinf/base.html' %}
+
+
+{% block title %}
+    {{ user.username }}'s favorite skins table
+{% endblock %}
+
+{% block content %}
+    <div align="center">
+        <form method="post">
+        {% csrf_token %}
+        <table border="1px">
+            <th>Image</th>
+            <th>Name</th>
+            <th>Steam_price</th>
+            <th>Market_price</th>
+            <th>Buff_price</th>
+            <th>Del fav</th>
+            {% for skin in fav_table_skins %}
+                <tr>
+                    <td>
+                        <div align="center" style="width: 115px">
+                            <img src="{{ skin.get_image_url }}" alt="" width="100%">
+                        </div>
+                    </td>
+                    <td><a href="{% url 'skin_detail' pk=skin.id %}"><h3>{{ skin.name }}</h3></a></td>
+                    <td><a href="{{ skin.steam_link }}" target="_blank"><h3 align="center">{{ skin.steam_price }}</h3></a></td>
+                    <td><a href="{{ skin.market_link }}" target="_blank"><h3 align="center">{{ skin.market_price }}</h3></a></td>
+                    <td><a href="{{ skin.buff_link }}" target="_blank"><h3 align="center">{{ skin.buff_price }}</h3></a></td>
+                    <td align="center"><input type="checkbox" value="{{ skin.id }}" name="del_from_fav"></td>
+                </tr>
+            {% endfor %}
+        <button type="submit" style="margin-bottom: 10px">Delete skins from favorite</button>
+        </table>
+        </form>
+    </div>
+{% endblock %}

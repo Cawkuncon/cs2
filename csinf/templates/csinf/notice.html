@@ -1,0 +1,13 @@
+{% extends 'csinf/base.html' %}
+
+{% block title %}
+    {{ user.username }}'s notices
+{% endblock %}
+
+{% block content %}
+    <div align="center" style="align-content: center; margin-top:50px ">
+{#    {% for skin in notice_skins %}#}
+{#        <h4 style="margin: 1px"><a href="{% url 'notice_detail' pk=skin.id %}">{{ skin.name }}</a></h4>#}
+{#    {% endfor %}#}
+    </div>
+{% endblock %}

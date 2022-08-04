@@ -1,0 +1,19 @@
+{% extends 'csinf/base.html' %}
+
+{% block title %}
+    {{ user.username }}'s profile
+{% endblock %}
+{% block content %}
+    <h2>{{ user.username }}'s profile</h2>
+    <div>
+        <div>
+            <a href={% url 'profile_skins' %}>List skins</a>
+        </div>
+        <div>
+            <a href={% url 'profile_table' %}>Table skins</a>
+        </div>
+        <div>
+            <a href="{% url 'notice' %}">Notice</a>
+        </div>
+    </div>
+{% endblock %}

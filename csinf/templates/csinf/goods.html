@@ -1,0 +1,96 @@
+{% extends 'csinf/base.html' %}
+
+
+{% block title %}
+    Goods
+{% endblock %}
+
+{% block content %}
+    <div style="margin-left: 30%">
+        <form method="GET">
+            {{ form.as_p }}
+            <br>
+            <label for="id_count_value">Количество записей на страницу</label>
+            <input type="number" name="count_value" min="1" max="500" step="any" id="id_count_value"
+                   value={{ cou_val }}>
+            <button>Применить</button>
+        </form>
+    </div>
+    <br>
+    <div style="margin-left: 20%">
+        <form method="post">
+            {% csrf_token %}
+            <div style="margin-bottom: 10px">
+                <button type="submit">Update favorite</button>
+            </div>
+            <table border=1px>
+                <th>Name</th>
+                <th>steam_price</th>
+                <th>market_price</th>
+                <th>buff_price</th>
+                <th>market_order</th>
+                <th>buff_order</th>
+                <th>sb</th>
+                <th>sm</th>
+                <th>mb</th>
+                <th>ms</th>
+                <th>bm</th>
+                <th>bs</th>
+                <th>market_7d</th>
+                <th>num_sell_buff</th>
+                <th>num_order_buff</th>
+                <th>favorite</th>
+                <th>del fav</th>
+                <th>notice</th>
+                {% for skin in skins %}
+                    <tr>
+                        <td><a href="{% url 'skin_detail' pk=skin.id %}" target="_blank">{{ skin.name }}</a></td>
+                        <td><a href="{{ skin.steam_link }}" target="_blank">{{ skin.steam_price }}</a></td>
+                        <td><a href="{{ skin.market_link }}" target="_blank">{{ skin.market_price }}</a></td>
+                        <td><a href="{{ skin.buff_link }}" target="_blank">{{ skin.buff_price }}</a></td>
+                        <td>{{ skin.market_order }}</td>
+                        <td>{{ skin.buff_order }}</td>
+                        <td>{{ skin.sb }}</td>
+                        <td>{{ skin.sm }}</td>
+                        <td>{{ skin.mb }}</td>
+                        <td>{{ skin.ms }}</td>
+                        <td>{{ skin.bm }}</td>
+                        <td>{{ skin.bs }}</td>
+                        <td>{{ skin.market_7d }}</td>
+                        <td>{{ skin.num_sell_buff }}</td>
+                        <td>{{ skin.num_order_buff }}</td>
+                        {% if skin.id in list_favorite_skins %}
+                            <td><input type="checkbox" value="{{ skin.id }}" name="favorite_skinid" checked="" disabled>
+                            </td>
+                            <td><input type="checkbox" value="{{ skin.id }}" name="delfav_skinid"></td>
+                            <td><button onclick="location.href='{% url 'notice_detail' pk=skin.id %}'" type="button">Notice</button></td>
+                        {% else %}
+                            <td><input type="checkbox" value="{{ skin.id }}" name="favorite_skinid"></td>
+                            <td><input type="checkbox" value="{{ skin.id }}" name="delfav_skinid" disabled></td>
+                            <td><button disabled>Notice</button></td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </form>
+    </div>
+    <br>
+    <div class="pagination" align="center">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1{{ min_max }}{{ order_by }}{{ max_value }}{{ min_value }}{{ filter_num }}{{ count_value }}">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}{{ min_max }}{{ order_by }}{{ max_value }}{{ min_value }}{{ filter_num }}{{ count_value }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{{ min_max }}{{ order_by }}{{ max_value }}{{ min_value }}{{ filter_num }}{{ count_value }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}{{ min_max }}{{ order_by }}{{ max_value }}{{ min_value }}{{ filter_num }}{{ count_value }}">last &raquo;</a>
+        {% endif %}
+    </span>
+    </div>
+{% endblock %}
+
