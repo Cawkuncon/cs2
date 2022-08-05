@@ -10,7 +10,7 @@ from django.views.generic.edit import ModelFormMixin, CreateView
 
 from accounts.models import MyUser
 from csinf.forms import FormOrderBy
-from csinf.models import SkinInfo
+from csinf.models import SkinInfo, Notice
 
 
 # @login_required
@@ -140,3 +140,12 @@ class ProfileTableSkins(LoginRequiredMixin, ListView):
             current_user.favorite_skins.remove(*list_skin)
         return super().get(request, *args, **kwargs)
 
+
+class NoticeView(LoginRequiredMixin, ListView):
+    model = Notice
+    template_name = 'csinf/notices.html'
+    context_object_name = 'notices'
+
+    def get_queryset(self):
+        queryset = Notice.skin_name.myuser_set.filter(pk=self.request.user.id)
+        return queryset

@@ -1,6 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 
+from csinf.models import Notice
 
 variable = [
     (None, 'Выберите параметры сортировки'),
@@ -55,6 +56,7 @@ class FormOrderBy(forms.Form):
     max_value = forms.FloatField(min_value=0, max_value=100000, label='Максимальное значение', required=False)
 
 
-
-
-
+class NoticeForm(forms.ModelForm):
+    class Meta:
+        model = Notice
+        exclude = ['date_notice', 'date_update']

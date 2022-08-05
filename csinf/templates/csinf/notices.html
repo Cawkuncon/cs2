@@ -1,0 +1,11 @@
+{% extends 'csinf/base.html' %}
+{% block title %}
+    {{ user.username }}'s notices
+{% endblock %}
+
+{% block content %}
+    {% for notice in notices %}
+        {{ notice }}
+    {% endfor %}
+
+{% endblock %}

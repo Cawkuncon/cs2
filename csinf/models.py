@@ -40,3 +40,13 @@ class SkinInfo(models.Model):
     def __str__(self):
         return self.name
 
+
+class Notice(models.Model):
+    skin_name = models.ForeignKey(SkinInfo, on_delete=models.CASCADE, null=True)
+    buy_from = models.CharField(choices=market_choice, default='S')
+    sell_to = models.CharField(choices=models, default='B')
+    buy_price = models.FloatField()
+    sell_price = models.FloatField()
+    text_notice = models.TextField(blank=True)
+    date_notice = models.DateTimeField(auto_now_add=True)
+    date_update = models.DateTimeField(auto_now=True)
