@@ -4,13 +4,16 @@
     {{ user.username }}'s profile
 {% endblock %}
 {% block content %}
-    <h2>{{ user.username }}'s profile</h2>
-    <div>
+    <h2 align="center">{{ user.username }}'s profile</h2>
+    <div align="center">
         <div>
             <a href={% url 'profile_skins' %}>List skins</a>
         </div>
         <div>
             <a href={% url 'profile_table' %}>Table skins</a>
+        </div>
+        <div>
+            <a href={% url 'notices' %}>Notices</a>
         </div>
     </div>
 {% endblock %}

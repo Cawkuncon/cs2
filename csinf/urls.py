@@ -8,4 +8,5 @@ urlpatterns = [
     path('goods/<int:pk>/', views.SkinDetail.as_view(), name='skin_detail'),
     path('profileskins/', views.ProfileListSkins.as_view(), name='profile_skins'),
     path('profiletable/', views.ProfileTableSkins.as_view(), name='profile_table'),
+    path('notices/', views.NoticeView.as_view(), name='notices'),
 ]

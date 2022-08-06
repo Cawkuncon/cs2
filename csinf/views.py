@@ -91,8 +91,10 @@ class SkinDetail(LoginRequiredMixin, FormView, DetailView):
         context['form'] = form
         try:
             context['fav_skin'] = current_user.favorite_skins.get(id=self.object.id)
+            context['user_notices'] = Notice.objects.filter(username_notice=current_user)
         except Exception:
             context['fav_skin'] = None
+            context['user_notices'] = None
         return context
 
     def post(self, request, *args, **kwargs):
@@ -102,6 +104,7 @@ class SkinDetail(LoginRequiredMixin, FormView, DetailView):
             if form.is_valid():
                 notice = form.save(commit=False)
                 notice.skin_name = current_user.favorite_skins.get(id=self.kwargs.get('pk'))
+                notice.username_notice = current_user
                 notice.save()
         if self.request.POST.get('fav_add'):
             skin_add_fav = SkinInfo.objects.get(pk=self.request.POST.get('fav_add'))
@@ -159,5 +162,5 @@ class NoticeView(LoginRequiredMixin, ListView):
     context_object_name = 'notices'
 
     def get_queryset(self):
-        queryset = Notice.skin_name.myuser_set.filter(pk=self.request.user.id)
+        queryset = Notice.objects.filter(username_notice=self.request.user)
         return queryset

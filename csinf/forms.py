@@ -62,5 +62,6 @@ class NoticeForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             'skin_name': HiddenInput(),
+            'username_notice': HiddenInput(),
         }
         # exclude = ['skin_name', ]

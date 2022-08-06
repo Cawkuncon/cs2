@@ -1,4 +1,4 @@
-from django.contrib.auth.models import AbstractUser
+# from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 # Create your models here.
@@ -43,6 +43,7 @@ class SkinInfo(models.Model):
 
 class Notice(models.Model):
     """добавить юзера через foreignkey"""
+    username_notice = models.ForeignKey('accounts.MyUser', on_delete=models.CASCADE, null=True, blank=True)
     skin_name = models.ForeignKey(SkinInfo, on_delete=models.CASCADE, null=True, blank=True)
     buy_from = models.CharField(choices=market_choice, default='S', max_length=1)
     sell_to = models.CharField(choices=market_choice, default='B', max_length=1)
@@ -51,3 +52,6 @@ class Notice(models.Model):
     text_notice = models.TextField(blank=True)
     date_notice = models.DateTimeField(auto_now_add=True)
     date_update = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['username_notice', '-date_notice']
