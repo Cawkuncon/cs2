@@ -9,7 +9,7 @@ from django.views.generic import ListView, FormView, DetailView, UpdateView
 from django.views.generic.edit import ModelFormMixin, CreateView
 
 from accounts.models import MyUser
-from csinf.forms import FormOrderBy
+from csinf.forms import FormOrderBy, NoticeForm
 from csinf.models import SkinInfo, Notice
 
 
@@ -78,14 +78,17 @@ class ListSkins(LoginRequiredMixin, ListView, FormView):
         return super().get(request, *args, **kwargs)
 
 
-class SkinDetail(LoginRequiredMixin, DetailView):
+class SkinDetail(LoginRequiredMixin, FormView, DetailView):
     template_name = 'csinf/detail.html'
     context_object_name = 'skin_info'
     model = SkinInfo
+    form_class = NoticeForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         current_user = MyUser.objects.get(pk=self.request.user.id)
+        form = NoticeForm()
+        context['form'] = form
         try:
             context['fav_skin'] = current_user.favorite_skins.get(id=self.object.id)
         except Exception:
@@ -94,6 +97,12 @@ class SkinDetail(LoginRequiredMixin, DetailView):
 
     def post(self, request, *args, **kwargs):
         current_user = MyUser.objects.get(pk=self.request.user.id)
+        if self.request.POST.get('form_notice_add'):
+            form = NoticeForm(self.request.POST)
+            if form.is_valid():
+                notice = form.save(commit=False)
+                notice.skin_name = current_user.favorite_skins.get(id=self.kwargs.get('pk'))
+                notice.save()
         if self.request.POST.get('fav_add'):
             skin_add_fav = SkinInfo.objects.get(pk=self.request.POST.get('fav_add'))
             current_user.favorite_skins.add(skin_add_fav)
@@ -102,8 +111,11 @@ class SkinDetail(LoginRequiredMixin, DetailView):
             current_user.favorite_skins.remove(skin_delete_fav)
         return super().get(request, *args, **kwargs)
 
-    # def get(self, request, *args, **kwargs):
-    #     return super().get(request, *args, **kwargs)
+    def get_success_url(self, *args, **kwargs):
+        return reverse_lazy('skin_detail', kwargs={'pk': self.kwargs.get('pk')})
+
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
 
 class ProfileListSkins(LoginRequiredMixin, ListView):

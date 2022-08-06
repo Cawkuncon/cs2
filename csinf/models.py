@@ -42,9 +42,10 @@ class SkinInfo(models.Model):
 
 
 class Notice(models.Model):
-    skin_name = models.ForeignKey(SkinInfo, on_delete=models.CASCADE, null=True)
-    buy_from = models.CharField(choices=market_choice, default='S')
-    sell_to = models.CharField(choices=models, default='B')
+    """добавить юзера через foreignkey"""
+    skin_name = models.ForeignKey(SkinInfo, on_delete=models.CASCADE, null=True, blank=True)
+    buy_from = models.CharField(choices=market_choice, default='S', max_length=1)
+    sell_to = models.CharField(choices=market_choice, default='B', max_length=1)
     buy_price = models.FloatField()
     sell_price = models.FloatField()
     text_notice = models.TextField(blank=True)

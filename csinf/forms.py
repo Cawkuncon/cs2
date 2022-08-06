@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import ModelForm
+from django.forms import ModelForm, HiddenInput
 
 from csinf.models import Notice
 
@@ -41,9 +41,9 @@ variable2 = [
 ]
 
 min_max = [
-    (None, 'Выберите тип сортировки'),
-    ('-', 'По убыванию'),
+    # (None, 'Выберите тип сортировки'),
     ('+', 'По возрастанию'),
+    ('-', 'По убыванию'),
 ]
 
 
@@ -59,4 +59,8 @@ class FormOrderBy(forms.Form):
 class NoticeForm(forms.ModelForm):
     class Meta:
         model = Notice
-        exclude = ['date_notice', 'date_update']
+        fields = '__all__'
+        widgets = {
+            'skin_name': HiddenInput(),
+        }
+        # exclude = ['skin_name', ]

@@ -40,4 +40,14 @@
         {% endif %}
     </form>
     </div>
+    <div style="width: 300px; margin-left: 40%">
+        <form method="post">
+            {% csrf_token %}
+            {% if fav_skin %}
+            {{ form }}
+            <input type="hidden" name="form_notice_add" value="{{ skin_info.id }}">
+            <button type="submit">Add Notice</button>
+            {% endif %}
+        </form>
+    </div>
 {% endblock %}
