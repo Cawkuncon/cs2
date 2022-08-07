@@ -1,4 +1,6 @@
 # from django.contrib.auth.models import AbstractUser
+import datetime
+
 from django.db import models
 
 # Create your models here.
@@ -54,4 +56,16 @@ class Notice(models.Model):
     date_update = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['username_notice', '-date_notice']
+        ordering = ['-date_notice']
+
+    def get_date(self):
+        return datetime.datetime.strftime(self.date_notice, '%d.%m.%Y %H:%M:%S')
+
+    def get_buy_from(self):
+        return dict(market_choice).get(self.buy_from)
+
+    def get_sell_to(self):
+        return dict(market_choice).get(self.sell_to)
+
+    def __str__(self):
+        return f'{self.username_notice} {self.skin_name}'

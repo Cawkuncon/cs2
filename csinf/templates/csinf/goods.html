@@ -43,7 +43,7 @@
                 <th>del fav</th>
                 {% for skin in skins %}
                     <tr>
-                        <td><a href="{% url 'skin_detail' pk=skin.id %}" target="_blank">{{ skin.name }}</a></td>
+                        <td><a href="{% url 'skin_detail' pk=skin.id %}">{{ skin.name }}</a></td>
                         <td><a href="{{ skin.steam_link }}" target="_blank">{{ skin.steam_price }}</a></td>
                         <td><a href="{{ skin.market_link }}" target="_blank">{{ skin.market_price }}</a></td>
                         <td><a href="{{ skin.buff_link }}" target="_blank">{{ skin.buff_price }}</a></td>

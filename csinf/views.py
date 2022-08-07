@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.shortcuts import render
-
+from django.contrib import messages
 # Create your views here.
 from django.urls import reverse_lazy
 from django.views.generic import ListView, FormView, DetailView, UpdateView
@@ -60,12 +60,11 @@ class ListSkins(LoginRequiredMixin, ListView, FormView):
         context['list_favorite_skins'] = list(map(lambda x: x.id, current_user.favorite_skins.all()))
         return context
 
-    # def get(self, request, *args, **kwargs):
-    #     return super().get(request, *args, **kwargs)
-
     def post(self, request, *args, **kwargs):
         list_skins = self.request.POST.getlist('favorite_skinid')
         list_skins_del = self.request.POST.getlist('delfav_skinid')
+        if list_skins or list_skins_del:
+            messages.add_message(request, messages.SUCCESS, 'Update successful')
         if list_skins or list_skins_del:
             current_user = MyUser.objects.get(pk=self.request.user.id)
             list_skins_fav = list(map(lambda x: x.id, current_user.favorite_skins.all()))
@@ -75,7 +74,10 @@ class ListSkins(LoginRequiredMixin, ListView, FormView):
             if list_skins_del:
                 skins_del = SkinInfo.objects.filter(id__in=list_skins_del)
                 current_user.favorite_skins.remove(*skins_del)
-        return super().get(request, *args, **kwargs)
+        return super().post(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse_lazy('goods')
 
 
 class SkinDetail(LoginRequiredMixin, FormView, DetailView):
@@ -90,35 +92,43 @@ class SkinDetail(LoginRequiredMixin, FormView, DetailView):
         form = NoticeForm()
         context['form'] = form
         try:
-            context['fav_skin'] = current_user.favorite_skins.get(id=self.object.id)
-            context['user_notices'] = Notice.objects.filter(username_notice=current_user)
+            context['fav_skin'] = current_user.favorite_skins.get(id=self.kwargs.get('pk'))
         except Exception:
             context['fav_skin'] = None
+        try:
+            context['user_notices'] = Notice.objects.filter(
+                username_notice=current_user).filter(
+                skin_name=self.object.id)
+        except Exception:
             context['user_notices'] = None
         return context
 
     def post(self, request, *args, **kwargs):
         current_user = MyUser.objects.get(pk=self.request.user.id)
+        self.object = self.get_object()
         if self.request.POST.get('form_notice_add'):
             form = NoticeForm(self.request.POST)
             if form.is_valid():
                 notice = form.save(commit=False)
-                notice.skin_name = current_user.favorite_skins.get(id=self.kwargs.get('pk'))
+                notice.skin_name = SkinInfo.objects.get(id=self.object.id)
                 notice.username_notice = current_user
                 notice.save()
+        elif self.request.POST.get('delete_notice'):
+            try:
+                notice = Notice.objects.get(id=self.request.POST.get('delete_notice'))
+                notice.delete()
+            except Exception:
+                pass
         if self.request.POST.get('fav_add'):
             skin_add_fav = SkinInfo.objects.get(pk=self.request.POST.get('fav_add'))
             current_user.favorite_skins.add(skin_add_fav)
         elif self.request.POST.get('fav_delete'):
             skin_delete_fav = SkinInfo.objects.get(pk=self.request.POST.get('fav_delete'))
             current_user.favorite_skins.remove(skin_delete_fav)
-        return super().get(request, *args, **kwargs)
+        return super().post(request, *args, **kwargs)
 
     def get_success_url(self, *args, **kwargs):
         return reverse_lazy('skin_detail', kwargs={'pk': self.kwargs.get('pk')})
-
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
 
 
 class ProfileListSkins(LoginRequiredMixin, ListView):

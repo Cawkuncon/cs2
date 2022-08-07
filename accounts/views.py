@@ -1,10 +1,14 @@
+from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import LoginView, LogoutView
-from django.shortcuts import render
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
+from django.contrib import messages
+from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404
 
 # Create your views here.
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView
+from django.views import View
+from django.views.generic import CreateView, ListView, DeleteView, DetailView, TemplateView
 
 from accounts.forms import RegisterForm
 from accounts.models import MyUser
@@ -24,7 +28,35 @@ class RegisterUserView(CreateView):
     template_name = 'register.html'
     success_url = reverse_lazy('login')
 
+    def post(self, request, *args, **kwargs):
+        messages.add_message(request, messages.SUCCESS, message='User has been registered successfully')
+        return super().post(request, *args, **kwargs)
 
-class FavoriteSkinsView(LoginRequiredMixin, ListView):
+
+class ProfileView(LoginRequiredMixin, TemplateView):
     template_name = 'profile.html'
-    queryset = MyUser.objects.all()  # поменять на def get_queryset
+
+
+class ChangePassword(LoginRequiredMixin, PasswordChangeView):
+    success_url = reverse_lazy('profile')
+
+
+class DeleteUser(LoginRequiredMixin, DeleteView):
+    """почему так???"""
+    model = MyUser
+    template_name = 'delete_user.html'
+    success_url = reverse_lazy('register')
+
+    def setup(self, request, *args, **kwargs):
+        self.user_id = request.user.pk
+        return super().setup(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        logout(request)
+        messages.add_message(request, messages.SUCCESS, message='User has been deleted successfully')
+        return super().post(request, *args, **kwargs)
+
+    def get_object(self, queryset=None):
+        if not queryset:
+            queryset = self.get_queryset()
+        return get_object_or_404(queryset, pk=self.user_id)
