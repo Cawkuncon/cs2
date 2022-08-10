@@ -12,7 +12,6 @@ from csinf.models import SkinInfo
 objects_exists = SkinInfo.objects.all()
 
 def djangosavetosql(dictsave: dict):
-    print('djangosave')
     for num_skin in range(len(dictsave['Name'])):
         new_skin_dict = {
             'name': dictsave['Name'][num_skin],

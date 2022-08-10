@@ -67,4 +67,4 @@ if __name__ == '__main__':
             dict_to_save['Buff Link'].append(buff_dict[item]['buff_link'])
             dict_to_save['Market Link'].append(market_item['link'])
             dict_to_save['Steam Link'].append(buff_dict[item]['steam_link'])
-        djangosavetosql(dict_to_save)
+    djangosavetosql(dict_to_save)

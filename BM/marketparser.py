@@ -62,5 +62,4 @@ def market_parser(game):
             except ZeroDivisionError:
                 dict_market[name]['ratio_price_order'] = float(req.get('price', 1)) / (
                         float(req.get('buy_order', 1)) + 1)
-    print('parser market end')
     return dict_market
