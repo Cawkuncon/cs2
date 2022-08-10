@@ -1,14 +1,11 @@
+from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
-from django.contrib import messages
-from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
-
+from django.shortcuts import get_object_or_404
 # Create your views here.
 from django.urls import reverse_lazy
-from django.views import View
-from django.views.generic import CreateView, ListView, DeleteView, DetailView, TemplateView
+from django.views.generic import CreateView, DeleteView, TemplateView
 
 from accounts.forms import RegisterForm
 from accounts.models import MyUser
@@ -28,10 +25,6 @@ class RegisterUserView(CreateView):
     template_name = 'register.html'
     success_url = reverse_lazy('login')
 
-    def post(self, request, *args, **kwargs):
-        messages.add_message(request, messages.SUCCESS, message='User has been registered successfully')
-        return super().post(request, *args, **kwargs)
-
 
 class ProfileView(LoginRequiredMixin, TemplateView):
     template_name = 'profile.html'
@@ -39,6 +32,7 @@ class ProfileView(LoginRequiredMixin, TemplateView):
 
 class ChangePassword(LoginRequiredMixin, PasswordChangeView):
     success_url = reverse_lazy('profile')
+    template_name = 'pass_change.html'
 
 
 class DeleteUser(LoginRequiredMixin, DeleteView):

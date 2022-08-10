@@ -1,12 +1,8 @@
-import os.path
-import pprint
-from pathlib import Path
-
-from BM.savetosql import savetosql
 from initialize_buff_settings import session, min_price, max_price, game, message_initialization
-from course_dol_rub_cny import CourseCnyRub, CourseDolRub
+from course_dol_rub_cny import CourseCnyRub
 from buffparser import buff_parser
 from marketparser import market_parser
+from djangosavetosql import djangosavetosql
 
 dict_to_save = {
     'Name': [],
@@ -30,11 +26,9 @@ dict_to_save = {
 }
 
 YR = float(CourseCnyRub().get_course())
-pathsql = os.path.join(Path(__file__).parent.parent, 'db.sqlite3')
 
 buff_dict = buff_parser(session, min_price, max_price, game, message_initialization)
 market_dict = market_parser(game)
-
 
 def r(x):
     return round(x, 2)
@@ -73,4 +67,4 @@ if __name__ == '__main__':
             dict_to_save['Buff Link'].append(buff_dict[item]['buff_link'])
             dict_to_save['Market Link'].append(market_item['link'])
             dict_to_save['Steam Link'].append(buff_dict[item]['steam_link'])
-    savetosql(dict_to_save, pathsql)
+        djangosavetosql(dict_to_save)

@@ -6,6 +6,7 @@ from django.db import models
 # Create your models here.
 from django.forms import widgets
 
+
 market_choice = (
     ('S', 'steam'),
     ('M', 'market'),

@@ -17,17 +17,27 @@ def market_parser(game):
         req = request['items'][item]
         if dict_market.get(name):
             if float(req.get('price')) < float(dict_market[name]['price']):
+                if dict_market[name].get('popularity_7d'):
+                    popularity = int(dict_market[name]['popularity_7d'])
+                else:
+                    popularity = 1
                 dict_market[name] = dict()
                 dict_market[name]['price'] = req.get('price', 1)
                 if req.get('buy_order'):
-                    dict_market[name]['buy_order'] = req.get('buy_order', 1)
+                    dict_market[name]['buy_order'] = req.get('buy_order')
                 else:
                     dict_market[name]['buy_order'] = 1
-                dict_market[name]['avg_price'] = req.get('avg_price', 1)
-                if req.get('popularity_7d'):
-                    dict_market[name]['popularity_7d'] = req.get('popularity_7d', 1)
+                if req.get('avg_price'):
+                    dict_market[name]['avg_price'] = req.get('avg_price')
                 else:
-                    dict_market[name]["popularity_7d"] = 1
+                    dict_market[name]['avg_price'] = 1
+                if req.get('popularity_7d'):  # !!!!
+                    if int(req.get('popularity_7d')) > popularity:
+                        dict_market[name]['popularity_7d'] = req.get('popularity_7d')
+                    else:
+                        dict_market[name]['popularity_7d'] = popularity
+                else:
+                    dict_market[name]["popularity_7d"] = popularity
                 dict_market[name]['link'] = f'{link_game}{item.replace("_", "-")}'
                 try:
                     dict_market[name]['ratio_price_order'] = float(req.get('price', 1)) / float(req.get('buy_order', 1))
