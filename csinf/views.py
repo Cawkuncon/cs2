@@ -37,9 +37,9 @@ class ListSkins(LoginRequiredMixin, ListView, FormView):
         filter_value = self.request.GET.get('filter_num')
         if mm and name_order and max_value and min_value and filter_value:
             queryset = SkinInfo.objects.filter(**{f'{filter_value}__gte': min_value}).filter(
-                **{f'{filter_value}__lte': max_value}).order_by(f'{mm.replace("+", "")}{name_order}')
+                **{f'{filter_value}__lte': max_value}).order_by(f'{mm.replace("+", "")}{name_order}'.strip())
         elif mm and name_order:
-            queryset = SkinInfo.objects.order_by(f'{mm.replace("+", "")}{name_order}')
+            queryset = SkinInfo.objects.order_by(f'{mm.replace("+", "")}{name_order}'.strip())
         elif max_value and min_value and filter_value:
             queryset = SkinInfo.objects.filter(**{f'{filter_value}__gte': min_value}).filter(
                 **{f'{filter_value}__lte': max_value})
@@ -49,11 +49,11 @@ class ListSkins(LoginRequiredMixin, ListView, FormView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['min_max'] = f"&min_max={self.request.GET.get('min_max', '')}"
-        context['order_by'] = f"&order_by={self.request.GET.get('order_by', '')}"
-        context['max_value'] = f"&max_value={self.request.GET.get('max_value', '')}"
-        context['min_value'] = f"&min_value={self.request.GET.get('min_value', '')}"
-        context['filter_num'] = f"&filter_num={self.request.GET.get('filter_num', '')}"
+        context['min_max'] = f"&min_max={self.request.GET.get('min_max')}"
+        context['order_by'] = f"&order_by={self.request.GET.get('order_by')}"
+        context['max_value'] = f"&max_value={self.request.GET.get('max_value')}"
+        context['min_value'] = f"&min_value={self.request.GET.get('min_value')}"
+        context['filter_num'] = f"&filter_num={self.request.GET.get('filter_num')}"
         context['count_value'] = f"&count_value={self.request.GET.get('count_value', self.paginate_by)}"
         context['cou_val'] = self.request.GET.get('count_value', 50)
         current_user = MyUser.objects.get(pk=self.request.user.id)
