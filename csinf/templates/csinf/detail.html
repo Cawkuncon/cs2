@@ -6,8 +6,8 @@
 {% endblock %}
 
 {% block content %}
-    <div style="position: absolute; left: 20%; margin: 1%">
-        <div align="center">
+    <div align="center">
+        <div>
             <h1><a href="{{ skin_info.steam_link }}" target="_blank">{{ skin_info.name }}</a></h1>
             <a href="{{ skin_info.buff_link }}" target="_blank"><img src="{{ skin_info.get_image_url }}" alt=""></a>
             <h2><a href="{{ skin_info.steam_link }}" target="_blank">Steam price</a>: {{ skin_info.steam_price }} &#165; ---
@@ -24,7 +24,7 @@
             <h3>order buff: {{ skin_info.num_order_buff }}</h3>
             <h3>market 7d sales: {{ skin_info.market_7d }}</h3>
         </div>
-        <div align="center">
+        <div>
             <form method="POST">
             {% csrf_token %}
                 {% if not fav_skin %}
@@ -36,33 +36,35 @@
                 {% endif %}
             </form>
         </div>
-    </div>
-    <div style="width: 300px; margin: 1%; position: absolute; top: 15%; left: 5%">
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="hidden" name="form_notice_add" value="{{ skin_info.id }}">
-            <button type="submit">Add Notice</button>
-        </form>
-    </div>
-
-    <div style="position: absolute; top: 15%; right: 10%">
-    {% if user_notices %}
-        {% for notice in user_notices %}
-            <div>
-                <p>{{ notice.get_date }}</p>
-                <p>Buy from {{ notice.get_buy_from|title }}: {{ notice.buy_price }} &#165;</p>
-                <p>Sell to {{ notice.get_sell_to|title }}: {{ notice.sell_price }} &#165;</p>
-                <p>{{ notice.text_notice }}</p>
-            </div>
+        <div>
             <form method="post">
                 {% csrf_token %}
-                <input type="hidden" name="delete_notice" value="{{ notice.id }}">
-                <button type="submit">Delete notice</button>
+                {{ form.as_p }}
+                <input type="hidden" name="form_notice_add" value="{{ skin_info.id }}">
+                <button type="submit">Add Notice</button>
             </form>
-        {% endfor %}
-        {% else %}
-        <h3>No notices</h3>
-    {% endif %}
+        </div>
+        <div>
+        {% if user_notices %}
+            {% for notice in user_notices %}
+                <div>
+                    <p>{{ notice.get_date }}</p>
+                    <p>Buy from {{ notice.get_buy_from|title }}: {{ notice.buy_price }} &#165;</p>
+                    <p>Sell to {{ notice.get_sell_to|title }}: {{ notice.sell_price }} &#165;</p>
+                    <p>{{ notice.text_notice }}</p>
+                    {% if notice.count_skins %}
+                        <p>{{ notice.count_skins }}</p>
+                    {% endif %}
+                </div>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="delete_notice" value="{{ notice.id }}">
+                    <button type="submit">Delete notice</button>
+                </form>
+            {% endfor %}
+            {% else %}
+            <h3>No notices</h3>
+        {% endif %}
+        </div>
     </div>
 {% endblock %}

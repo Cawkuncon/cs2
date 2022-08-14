@@ -1,6 +1,7 @@
 # from django.contrib.auth.models import AbstractUser
 import datetime
 
+from django.core.validators import MinValueValidator
 from django.db import models
 
 # Create your models here.
@@ -52,6 +53,7 @@ class Notice(models.Model):
     sell_to = models.CharField(choices=market_choice, default='B', max_length=1)
     buy_price = models.FloatField()
     sell_price = models.FloatField()
+    count_skins = models.IntegerField(validators=[MinValueValidator(1), ], blank=True, null=True)
     text_notice = models.TextField(blank=True)
     date_notice = models.DateTimeField(auto_now_add=True)
     date_update = models.DateTimeField(auto_now=True)

@@ -33,7 +33,8 @@ def djangosavetosql(dictsave: dict):
             'market_link': dictsave['Market Link'][num_skin],
             'steam_link': dictsave['Steam Link'][num_skin],
         }
-        try:
-            SkinInfo.objects.filter(name=dictsave['Name'][num_skin])[0].update(**new_skin_dict)
-        except Exception:
-            SkinInfo.objects.create(**new_skin_dict)
+        SkinInfo.objects.update_or_create(name=dictsave['Name'][num_skin], defaults=new_skin_dict)
+        # try:
+        #     SkinInfo.objects.filter(name=dictsave['Name'][num_skin])[0].update(**new_skin_dict)
+        # except Exception:
+        #     SkinInfo.objects.create(**new_skin_dict)

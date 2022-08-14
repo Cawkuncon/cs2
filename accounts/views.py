@@ -3,10 +3,8 @@ from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.shortcuts import get_object_or_404
-# Create your views here.
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, TemplateView
-
 from accounts.forms import RegisterForm
 from accounts.models import MyUser
 
@@ -33,7 +31,6 @@ class ProfileView(LoginRequiredMixin, TemplateView):
 class ChangePassword(LoginRequiredMixin, PasswordChangeView):
     success_url = reverse_lazy('profile')
     template_name = 'pass_change.html'
-
 
 class DeleteUser(LoginRequiredMixin, DeleteView):
     """почему так???"""

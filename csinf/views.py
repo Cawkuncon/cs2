@@ -1,13 +1,8 @@
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib import messages
-# Create your views here.
 from django.urls import reverse_lazy
-from django.views.generic import ListView, FormView, DetailView, UpdateView
-from django.views.generic.edit import ModelFormMixin, CreateView
-
+from django.views.generic import ListView, FormView, DetailView
 from accounts.models import MyUser
 from csinf.forms import FormOrderBy, NoticeForm
 from csinf.models import SkinInfo, Notice
@@ -29,6 +24,19 @@ class ListSkins(LoginRequiredMixin, ListView, FormView):
         value = self.request.GET.get('count_value', 50)
         return value
 
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['min_max'] = f"&min_max={self.request.GET.get('min_max', '')}"
+        context['order_by'] = f"&order_by={self.request.GET.get('order_by', '')}"
+        context['max_value'] = f"&max_value={self.request.GET.get('max_value', '')}"
+        context['min_value'] = f"&min_value={self.request.GET.get('min_value', '')}"
+        context['filter_num'] = f"&filter_num={self.request.GET.get('filter_num', '')}"
+        context['count_value'] = f"&count_value={self.request.GET.get('count_value', self.paginate_by)}"
+        context['cou_val'] = self.request.GET.get('count_value', 50)
+        current_user = MyUser.objects.get(pk=self.request.user.id)
+        context['list_favorite_skins'] = list(map(lambda x: x.id, current_user.favorite_skins.all()))
+        return context
+
     def get_queryset(self):
         mm = self.request.GET.get('min_max')
         name_order = self.request.GET.get('order_by')
@@ -46,19 +54,6 @@ class ListSkins(LoginRequiredMixin, ListView, FormView):
         else:
             queryset = SkinInfo.objects.all()
         return queryset
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        context['min_max'] = f"&min_max={self.request.GET.get('min_max')}"
-        context['order_by'] = f"&order_by={self.request.GET.get('order_by')}"
-        context['max_value'] = f"&max_value={self.request.GET.get('max_value')}"
-        context['min_value'] = f"&min_value={self.request.GET.get('min_value')}"
-        context['filter_num'] = f"&filter_num={self.request.GET.get('filter_num')}"
-        context['count_value'] = f"&count_value={self.request.GET.get('count_value', self.paginate_by)}"
-        context['cou_val'] = self.request.GET.get('count_value', 50)
-        current_user = MyUser.objects.get(pk=self.request.user.id)
-        context['list_favorite_skins'] = list(map(lambda x: x.id, current_user.favorite_skins.all()))
-        return context
 
     def post(self, request, *args, **kwargs):
         list_skins = self.request.POST.getlist('favorite_skinid')
