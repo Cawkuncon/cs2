@@ -21,4 +21,5 @@ urlpatterns = [
     path('', include('main.urls')),
     path('skins/', include('csinf.urls')),
     path('accounts/', include('accounts.urls')),
+    path('api/', include('api_info.urls')),
 ]

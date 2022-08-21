@@ -8,7 +8,7 @@ from csinf.forms import FormOrderBy, NoticeForm
 from csinf.models import SkinInfo, Notice
 
 
-# @login_required
+
 def skins(request):
     return render(request, 'csinf/index.html')
 

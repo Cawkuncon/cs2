@@ -6,6 +6,7 @@
 {% endblock %}
 
 {% block content %}
+    {% if skins %}
     <div style="margin-left: 30%">
         <form method="GET">
             {{ form.as_p }}
@@ -89,5 +90,8 @@
         {% endif %}
     </span>
     </div>
+        {% else %}
+        <h2 align="center">There are no skins in database yet</h2>
+    {% endif %}
 {% endblock %}
 
