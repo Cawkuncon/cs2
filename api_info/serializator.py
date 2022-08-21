@@ -23,24 +23,24 @@ class SkinDetalizer(serializers.ModelSerializer):
         fields = ('name', 'steam_price', 'market_price', 'buff_price', 'buff_link', 'market_link', 'steam_link')
 
 
-# class NoticeSerializer(serializers.ModelSerializer):
-#     username_notice = serializers.CharField()
-#
-#     class Meta:
-#         model = Notice
-#         fields = '__all__'
-#
-#     def to_representation(self, instance):
-#         response = super().to_representation(instance)
-#         response['skin_name'] = SkinDetalizer(instance.skin_name).data
-#         response['username_notice'] = UserDetalizer(instance.username_notice).data
-#         response['buy_from'] = Notice.get_buy_from(instance).title()
-#         response['sell_to'] = Notice.get_sell_to(instance).title()
-#         return response
+class NoticeSerializerAdmin(serializers.ModelSerializer):
+
+    class Meta:
+        model = Notice
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        response['skin_name'] = SkinDetalizer(instance.skin_name).data
+        response['username_notice'] = UserDetalizer(instance.username_notice).data
+        response['buy_from'] = Notice.get_buy_from(instance).title()
+        response['sell_to'] = Notice.get_sell_to(instance).title()
+        return response
 
 
 class NoticeSerializer(serializers.ModelSerializer):
     username_notice = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    # skin_name = serializers.HiddenField(default=)
 
     class Meta:
         model = Notice
