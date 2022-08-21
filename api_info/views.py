@@ -1,12 +1,8 @@
+from api_info.pagination import ListPagination, NoticePagination
+from api_info.permissions import IsUsersNotice
 from api_info.serializator import SkinSerializer, NoticeSerializer
 from csinf.models import SkinInfo, Notice
-from rest_framework import generics, permissions, pagination
-
-
-class ListPagination(pagination.PageNumberPagination):
-    page_size = 50
-    page_size_query_param = 'page_size'
-    max_page_size = 1000
+from rest_framework import generics, permissions
 
 
 class SkinList(generics.ListAPIView):
@@ -22,7 +18,17 @@ class SkinDetail(generics.RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticated, ]
 
 
-class NoticeList(generics.ListAPIView):
-    queryset = Notice.objects.all()
+class NoticeList(generics.ListCreateAPIView):
     serializer_class = NoticeSerializer
-    pagination_class = [permissions.IsAuthenticated, ]
+    permissions = [permissions.IsAuthenticated, ]
+    pagination_class = NoticePagination
+
+    def get_queryset(self):
+        user = self.request.user
+        return Notice.objects.filter(username_notice=user)
+
+
+class NoticeDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Notice.objects.all()
+    permission_classes = [permissions.IsAuthenticated, IsUsersNotice]
+    serializer_class = NoticeSerializer
