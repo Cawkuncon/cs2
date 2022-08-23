@@ -1,6 +1,6 @@
 from api_info.pagination import ListPagination, NoticePagination
 from api_info.permissions import IsUsersNotice, IsAdminNotice
-from api_info.serializator import SkinSerializer, NoticeSerializer, NoticeSerializerAdmin
+from api_info.serializator import SkinSerializer, NoticeSerializer, NoticeSerializerAdmin, NoticeDetailSerializer
 from csinf.models import SkinInfo, Notice
 from rest_framework import generics, permissions
 
@@ -37,7 +37,7 @@ class NoticeList(generics.ListCreateAPIView):
 class NoticeDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Notice.objects.all()
     permission_classes = [permissions.IsAuthenticated, IsUsersNotice]
-    serializer_class = NoticeSerializer
+    serializer_class = NoticeDetailSerializer
 
 
 class NoticeListAdmin(generics.ListAPIView):
